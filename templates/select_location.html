@@ -1,0 +1,91 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='location_style.css') }}">
+    </head>
+    <body>
+        <form action="dashboard" method="post" name='fo'>
+                <input type="radio" name='home' value='22.294048,114.169296' checked >Home A</option>
+                <input type="radio" name='home' value='22.3270946,114.166605'>Home B</option>
+                <input type='hidden' name='location' value='test' id='location'>
+
+        </form>
+        <p> Your Current Position: </p>
+        <p id="demo"></p>
+        {{load}}
+        {%if load%}
+        <div id='dashboard'>
+            <!-- start loop -->
+            {%for i in range(load['route']|length)%}
+            <div class='card'>
+                <div class='card_row' id='upper_part'>
+                    <div class='route_info'>
+                        <div class='route_digit'>{{load['route'][i]}}</div>
+                        <div class='destination'>{{load['locat'][i]}}</div>
+                    </div>
+                    <div class='eta_info'>
+                        <div class='current'>
+                            <div class='eta_digits'>{{load['min'][i]}}</div>
+                            <div class='current_status'>{{load['rmk_tc_1'][i]}}</div>
+                        </div>
+                        <div class='further'>
+                            <div class='eta_clock'>{{load['1'][i]}}</div>
+                            <div class='further_eta_row'>
+                                <div class='further_status'>{{load['rmk_tc_2'][i]}}</div>
+                                <div class='further_clock'>{{load['2'][i]}}</div>
+                            </div>
+                            <div class='further_eta_row'>
+                                <div class='further_status'>{{load['rmk_tc_3'][i]}}</div>
+                                <div class='further_clock'>{{load['3'][i]}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='card_row' id='lower_part'>
+                    <div class='travel_info'>
+                        <div class='stop_info'>{{load['orig_name_tc'][i]}}</div>
+                        <div class='eta_info'>{{load['1'][i]}}</div>
+                    </div>
+                    <div class='middle'>
+                        <div class='travel_symbol'>>>></div>
+                        <div class='travel_time'></div>
+                    </div>
+                    <div class='travel_info'>
+                        <div class='stop_info'>{{load['dest_name_tc'][i]}}</div>
+                        <div class='eta_info'></div>
+                    </div>
+                </div>
+            </div>
+            {%endfor%}
+        {%else%}
+            <div>Sorry, No Route is available for you</div>
+        {%endif%}
+        </div>
+        
+        <script>
+        var x = document.getElementById("demo");
+        var y = document.getElementById('location');
+
+        function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else { 
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+        }
+
+        function showPosition(position) {
+        x.innerHTML = "Latitude: " + position.coords.latitude + 
+                    "<br>Longitude: " + position.coords.longitude;
+        y.value = [position.coords.latitude, position.coords.longitude];
+        var but = document.createElement('INPUT');
+        but.setAttribute('type', 'submit');
+        document.fo.appendChild(but);
+        }
+
+        window.onload = getLocation;
+        </script>
+            
+        
+    </body>
+</html>
