@@ -7,7 +7,7 @@ import back_end
 
 keyboard = [
         KeyboardButton(
-            text='send me your location',
+            text='click to send locaiton',
             request_location=True
             )
         ]
