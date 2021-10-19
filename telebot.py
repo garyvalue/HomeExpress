@@ -5,49 +5,53 @@ from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, Reply
 from pprint import pprint
 import back_end
 
-bot = telepot.Bot('2058616638:AAGOp7JqhzalJga69mP_7-vuOGvnJ9dOVZE')
-ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text='location',request_location=True)]])
+keyboard = [
+        KeyboardButton(
+            text='send me your location',
+            request_location=True
+            )
+        ]
+
 
 def handle(msg):
+    # | this function will handle the message which is sent from the user
     type, _, chat_id = telepot.glance(msg)
-    print(msg['message_id'])
     bot.deleteMessage((chat_id, msg['message_id']))
+    
     if type == 'location':
-        geo = (msg['location']['latitude'], msg['location']['longitude'])
+        geo = (
+            msg['location']['latitude'], 
+            msg['location']['longitude']
+        )
+        
         m = back_end.match(user=geo)
         data = m.get_match_result()
+        
         if data:
             for i in range(len(data['route'])):
                 output = ''
                 for columns in ['route', 'orig_name_tc', 'dest_name_tc', '1']:
-                    output += data[columns][i] + '\n'
-                bot.sendMessage(chat_id, output)
+                    output += data[columns][i] + ' '
+                output += '\n'
+            bot.sendMessage(chat_id, output)
+            
         else:
+            
             bot.sendMessage(chat_id, '冇車去希慎')
+            
     else:
-        bot.sendMessage(chat_id, text='showing button', 
-                        reply_markup = ReplyKeyboardMarkup(
-                            keyboard=[
-                                        [
-                                        KeyboardButton(
-                                            text='send me your location',
-                                            request_location=True
-                                            )
-                                        ],
-                                        [
-                                        KeyboardButton(
-                                            text='send me your location',
-                                            request_location=True
-                                            )
-                                        ]
-                                    ]
-                            )
-                        )
+        
+        bot.sendMessage(
+            chat_id, 
+            text ='showing button', 
+            reply_markup = ReplyKeyboardMarkup(
+                keyboard = [keyboard]
+                )
+            )
 
         
 
-def test(msg):
-    print(msg)
+bot = telepot.Bot('2058616638:AAGOp7JqhzalJga69mP_7-vuOGvnJ9dOVZE')
 
 # this messageLoop is able to 
 MessageLoop(bot, handle).run_as_thread()
