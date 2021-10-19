@@ -28,6 +28,7 @@ def handle(msg):
         data = m.get_match_result()
         
         if data:
+            output = ''
             for i in range(len(data['route'])):
                 for columns in ['route', 'orig_name_tc', 'dest_name_tc', '1']:
                     output += data[columns][i] + ' '
