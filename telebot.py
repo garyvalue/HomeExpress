@@ -29,7 +29,6 @@ def handle(msg):
         
         if data:
             for i in range(len(data['route'])):
-                output = ''
                 for columns in ['route', 'orig_name_tc', 'dest_name_tc', '1']:
                     output += data[columns][i] + ' '
                 output += '\n'
