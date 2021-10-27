@@ -14,9 +14,10 @@ bd = mysql.connector.connect(
 
 BD = bd.cursor()
 
+
 class match:
-    
-    def __init__(self, user, home = (22.2797084,114.1816558)) -> None:
+
+    def __init__(self, user, home=(22.2797084, 114.1816558)) -> None:
         self.user_lat = user[0]
         self.user_lng = user[1]
         self.home_lat = home[0]
@@ -25,7 +26,7 @@ class match:
         self.mixed_route = self.query_mixed_route()
         self.connector = bd.cursor()
         pass
-    
+
     def get_nfb_match(self):
         sql = f"""
             SELECT 
@@ -72,13 +73,14 @@ class match:
                     AND RIGHT_T.route IS NOT NULL
                     AND LEFT_T.seq < RIGHT_T.seq;
         """
-        
+
         BD.execute(sql)
         self.output = BD.fetchall()
         self.co = "NFB"
-        if self.output: self.convert_output()
+        if self.output:
+            self.convert_output()
         return self.output
-    
+
     def get_kwb_match(self):
         sql = f"""
                 SELECT 
@@ -125,38 +127,42 @@ class match:
                         AND RIGHT_T.route IS NOT NULL
                         AND LEFT_T.seq < RIGHT_T.seq;
         """
-                
+
         BD.execute(sql)
         self.output = BD.fetchall()
         self.co = "KWB"
-        if self.output: self.convert_output()
+        if self.output:
+            self.convert_output()
         return self.output
-    
+
     def get_match_result(self):
-        kwb=self.get_kwb_match()
-        nfb=self.get_nfb_match()
+        kwb = self.get_kwb_match()
+        nfb = self.get_nfb_match()
         if all([kwb, nfb]):
             for key, value in kwb.items():
                 nfb[key] += value
             # here we need to complete the clean up process
             # if the route in sql list, then we execute the replace process
-            return nfb
+            output = nfb
         elif any([nfb, kwb]):
-            if kwb: return kwb
-            else: return nfb
+            if kwb:
+                output = kwb
+            else:
+                output = nfb
         else:
             return None
-    
+
+        return pd.DataFrame(output).T.to_markdown()
+
     def convert_output(self):
         key_dict = {
-            "KWB" : 
+            "KWB":
                 ['orig_stop', 'orig_name_tc', 'orig_seq', 'route', 'bound', 'service_type',
-                'orig_distance', 'dest_stop', 'dest_name_tc', 'dest_seq', 'dest_distance', 'co']
-            ,
-            "NFB" : 
+                    'orig_distance', 'dest_stop', 'dest_name_tc', 'dest_seq', 'dest_distance', 'co'],
+            "NFB":
                 ['orig_stop', 'orig_name_tc', 'orig_seq', 'route', 'bound', 'co',
-                'orig_distance', 'dest_stop', 'dest_name_tc', 'dest_seq', 'dest_distance', 'service_type']
-            
+                 'orig_distance', 'dest_stop', 'dest_name_tc', 'dest_seq', 'dest_distance', 'service_type']
+
         }
         val = {}
         val['1'] = []
@@ -172,17 +178,21 @@ class match:
         for row in self.output:
             for key, value in zip(key_dict[self.co], row):
                 val[key].append(value)
-                if key == 'route': route = value
-                elif key == 'co': co = value
-                elif key == 'orig_stop': stop = value
-                elif key == 'service_type': service_type = value
-            if self.co == "KWB": 
+                if key == 'route':
+                    route = value
+                elif key == 'co':
+                    co = value
+                elif key == 'orig_stop':
+                    stop = value
+                elif key == 'service_type':
+                    service_type = value
+            if self.co == "KWB":
                 val['co'].append(self.co)
                 self.url = f'https://data.etabus.gov.hk/v1/transport/kmb/eta/{stop}/{route}/{service_type}'
-            elif self.co == "NFB": 
+            elif self.co == "NFB":
                 val['service_type'].append("_")
                 self.url = f'https://rt.data.gov.hk/v1/transport/citybus-nwfb/eta/{co}/{stop}/{route}'
-            if d:= self.get_eta():
+            if d := self.get_eta():
                 for key, value in d.items():
                     val[key].append(value)
         self.output = val
@@ -196,13 +206,13 @@ class match:
                 except:
                     pass
             eta_dict = {
-                '1':"N.A.",
-                '2':"N.A.",
-                '3':"N.A.",
-                'min':" ",
-                'rmk_tc_1':" ",
-                'rmk_tc_2':" ",
-                'rmk_tc_3':" ",
+                '1': "N.A.",
+                '2': "N.A.",
+                '3': "N.A.",
+                'min': " ",
+                'rmk_tc_1': " ",
+                'rmk_tc_2': " ",
+                'rmk_tc_3': " ",
                 'locat': " "
             }
             assert data
@@ -211,13 +221,14 @@ class match:
                 if row['eta']:
                     eta_dict[str(row['eta_seq'])] = row['eta'][11:-9]
                     eta_dict[f'rmk_tc_{row["eta_seq"]}'] = row['rmk_tc']
-                    if row['eta_seq'] == 1: 
-                        time =  datetime.datetime.strptime(row['eta'][:-9], "%Y-%m-%dT%H:%M") - datetime.datetime.now()
+                    if row['eta_seq'] == 1:
+                        time = datetime.datetime.strptime(
+                            row['eta'][:-9], "%Y-%m-%dT%H:%M") - datetime.datetime.now()
                         time = str(abs(time)).split(':')
                         time = int(time[0]) * 60 + int(time[1])
                         eta_dict['min'] = time
                         eta_dict['locat'] = row['dest_tc']
-                
+
             return eta_dict
         except AssertionError:
             return eta_dict
@@ -230,12 +241,12 @@ class match:
         """
         BD.execute(sql)
         output = BD.fetchall()
-        
+
 
 class login:
     def __init__(self, user_id):
         self.id = user_id
-        
+
     def query(self):
         sql = f"""
         SELECT place_name, lat, lng
@@ -244,15 +255,17 @@ class login:
         """
         BD.execute(sql)
         output = BD.fetchall()
-        if output: return output
-        else: return None
+        if output:
+            return output
+        else:
+            return None
+
 
 if __name__ == "__main__":
     start = time.time()
-    user = (22.3270946,114.166605)
+    user = (22.3270946, 114.166605)
     home = (22.294048, 114.169296)
     m = match(user, home)
-    
-    
+
     print('processing time:')
     print(time.time() - start)

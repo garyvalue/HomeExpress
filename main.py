@@ -7,13 +7,16 @@ import time
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def redir():
     return render_template('select_location.html')
 
+
 @app.route('/home')
 def new():
     return render_template('select_location.html')
+
 
 @app.route('/dashboard', methods=['POST'])
 def access_data():
@@ -26,12 +29,11 @@ def access_data():
         print(user)
         server = back_end.match(home=home, user=user)
         data = server.get_match_result()
-        return render_template('select_location.html', load = data)
+        return render_template('select_location.html', load=data)
     else:
         return redirect(url_for('redir'))
 
+
 app.run(debug=True)
 
-
-
-        # <link rel="stylesheet" type = 'text/css' href="{{ url_for('static', filename='style.css') }}">
+# <link rel="stylesheet" type = 'text/css' href="{{ url_for('static', filename='style.css') }}">
