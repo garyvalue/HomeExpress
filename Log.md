@@ -21,3 +21,32 @@ Regarding the piror development experience, I clearify and listed out the follow
 Telegram is able to connect my local host SQL Server throught the chat bot which is ran by flask. Therefore, if the flask is able to receive the user location from the chatroom, we can run the code in our local server instead of cloud server.
 
 Basically, I will follow the tutorial from https://zaoldyeck.medium.com/%E6%89%8B%E6%8A%8A%E6%89%8B%E6%95%99%E4%BD%A0%E6%80%8E%E9%BA%BC%E6%89%93%E9%80%A0-telegram-bot-a7b539c3402a to develop the basic ooperation of chatbot. Then, depending on the requirements, I will design a new user experience to let user use my app in one click button.
+
+
+
+## To Do List of additional function
+1. The most important question is: 
+
+    How to show the information to user ?
+
+    #1 Markdown showing table.
+        it's not possible because of the exceeding word limits of sending message in Telegram
+    
+    #2 HTML format.
+        Don't know... but it has the same problem about the word limits, it is a greate tool to format the text in the message, I could take a try on it.
+
+    #3 
+
+    #4 we could generate a html file to make a preview website to user. 
+        let him know the detial information about the route, and the eta time estimation
+        we can use this html file to present more... 
+        But the challenge is how to generate it.................
+        and send it to user 
+
+        - now I have completed the operation flow of sending html to user... 
+        - but I need more time to draft the template of html. then input the value to create the html file
+
+        webkit2png is the library that able to convert html to png. we can use it to post the card to user.
+        reference : https://github.com/adamn/python-webkit2png
+
+
