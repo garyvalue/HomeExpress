@@ -33,6 +33,9 @@ class registeration:
     def start(self, update: Update, context: CallbackContext) -> int:
         pass
     
+    def distance_confirmation(self):
+        pass
+    
     def private_policy(self):
         pass
         
@@ -41,6 +44,32 @@ class registeration:
     
     def completion(self):
         pass
+    
+    def cancel(update: Update, context: CallbackContext) -> int:
+        """cancels and ends the conversation"""
+        user = update.message.from_user
+        logger.info(f'user {user.first_name} canceleed the conversation.')
+        update.message.reply_text(
+            'the registration is cancelled', reply_markup = ReplyKeyboardRemove()
+        )
+        return ConversationHandler.END
+    
+    def conversation_flow(self):
+        """
+        this is conversation handler,
+            timeout = 3mins
+            fallback by 'cancel'
+        """
+        return Conversationhandler(
+            entry_points=[CommandHandler('start', self.start)],
+            states={
+                location: [MessageHandler(Filters.location, self.location_confirmation)]
+                confirm: [CommandHandler('accept', self.completion)]
+            },
+            fallbacks=[CommandHandler('cancel', self.cancel),
+            allow_reentry = False
+            )
+                       
     
 class user_setting:
     def request(self) -> int:
