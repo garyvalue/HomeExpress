@@ -75,7 +75,7 @@ class registeration:
         return Conversationhandler(
             entry_points=[CommandHandler('start', registration.start)],
             states={
-                location: [MessageHandler(Filters.location, registration.location_confirmation)]
+                location: [MessageHandler(Filters.location, registration.location_confirmation)],
                 confirm: [CommandHandler('accept', registration.completion)]
             },
             fallbacks=[CommandHandler('cancel', registration.cancel),
