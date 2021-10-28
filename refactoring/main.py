@@ -28,7 +28,7 @@ dispatcher = updater.dispatcher
 
 
 
-class registeration:
+class registration:
     def start(update: Update, context: CallbackContext) -> int:
         """
         recieve the start command,
