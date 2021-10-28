@@ -25,8 +25,7 @@ API_KEY = "2058616638:AAGOp7JqhzalJga69mP_7-vuOGvnJ9dOVZE"
 updater = telegram.ext.Updater(API_KEY)
 # Retrieve the dispatcher, which will be used to add handlers
 dispatcher = updater.dispatcher
-updater.start_polling()
-updater.idle()
+
 
 
 class registeration:
@@ -42,6 +41,7 @@ class registeration:
                     with the keyboard button or inline keyboard
                     to send the location or cancel registration
         """
+        print(update.message.from_user)
         pass
     
     def distance_confirmation():
@@ -113,3 +113,7 @@ def locaiton():
 
 def route_genertion():
     pass
+
+dispatcher.add_handler(registration.conversation_flow)
+updater.start_polling()
+updater.idle()
