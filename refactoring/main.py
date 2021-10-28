@@ -22,7 +22,7 @@ logging.basicConfig(level=logging.INFO,
 # The API Key we received for our bot
 API_KEY = "2058616638:AAGOp7JqhzalJga69mP_7-vuOGvnJ9dOVZE"
 # Create an updater object with our API Key
-updater = telegram.ext.Updater(API_KEY)
+updater = Updater(API_KEY)
 # Retrieve the dispatcher, which will be used to add handlers
 dispatcher = updater.dispatcher
 
