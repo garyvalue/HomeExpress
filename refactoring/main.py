@@ -30,19 +30,31 @@ updater.idle()
 
 
 class registeration:
-    def start(self, update: Update, context: CallbackContext) -> int:
+    def start(update: Update, context: CallbackContext) -> int:
+        """
+        recieve the start command,
+            check the existing user_id,
+                if yes, 
+                    end this conversation
+                    start to ask him need to change the location setting? 
+                if no,
+                    continue -> private_policy
+                    with the keyboard button or inline keyboard
+                    to send the location or cancel registration
+        """
         pass
     
-    def distance_confirmation(self):
+    def distance_confirmation():
         pass
     
-    def private_policy(self):
+    def private_policy():
+        # print the private policy
         pass
         
-    def location_confirmation(self):
+    def location_confirmation():
         pass
     
-    def completion(self):
+    def completion():
         pass
     
     def cancel(update: Update, context: CallbackContext) -> int:
@@ -54,28 +66,50 @@ class registeration:
         )
         return ConversationHandler.END
     
-    def conversation_flow(self):
+    def conversation_flow():
         """
         this is conversation handler,
             timeout = 3mins
             fallback by 'cancel'
         """
         return Conversationhandler(
-            entry_points=[CommandHandler('start', self.start)],
+            entry_points=[CommandHandler('start', registration.start)],
             states={
-                location: [MessageHandler(Filters.location, self.location_confirmation)]
-                confirm: [CommandHandler('accept', self.completion)]
+                location: [MessageHandler(Filters.location, registration.location_confirmation)]
+                confirm: [CommandHandler('accept', registration.completion)]
             },
-            fallbacks=[CommandHandler('cancel', self.cancel),
+            fallbacks=[CommandHandler('cancel', registration.cancel),
             allow_reentry = False
             )
                        
     
 class user_setting:
-    def request(self) -> int:
+    def start() -> int:
         pass
-    def confirmation(self) -> int:
+                       
+    def confirmation() -> int:
         pass
+                       
+    def conversation_flow():
+        """
+        this is conversation handler,
+            timeout = 1min
+            fallback by 'cancel'
+        """
+        return Conversationhandler(
+            endtry_points=[CommandHandler('setting', user_setting.start)],
+            states={
+                confirmation: [MessageHandler(Filter.location, user_setting.confirmation)]
+            },
+            fallbacks=[CommandHandler('cancel', usersetting.cancel),
+            allow_reentry = False
+            )
+                       
+def match():
+    pass
     
-def location(self)
-# it will process all the command of /start than take an action 
+def locaiton():
+    pass
+
+def route_genertion():
+    pass
