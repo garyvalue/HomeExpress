@@ -78,7 +78,7 @@ class registeration:
                 location: [MessageHandler(Filters.location, registration.location_confirmation)],
                 confirm: [CommandHandler('accept', registration.completion)]
             },
-            fallbacks=[CommandHandler('cancel', registration.cancel),
+            fallbacks=[CommandHandler('cancel', registration.cancel)],
             allow_reentry = False
             )
                        
@@ -101,7 +101,7 @@ class user_setting:
             states={
                 confirmation: [MessageHandler(Filter.location, user_setting.confirmation)]
             },
-            fallbacks=[CommandHandler('cancel', usersetting.cancel),
+            fallbacks=[CommandHandler('cancel', usersetting.cancel)],
             allow_reentry = False
             )
                        
