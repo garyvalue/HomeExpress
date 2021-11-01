@@ -183,6 +183,7 @@ class user_database:
         pass
     
     def register(self, locat_data: tuples) -> None:
+        
         pass
     
     def _query(self) -> Bool:
@@ -215,7 +216,6 @@ class sql_table:
         CREATE TABLE {self.talbe_name}
         ({','.join(columns)})
         """
-        
         agent.execute(sql)
         database.commit()
         pass
@@ -247,9 +247,23 @@ class sql_table:
         pass
     
     def update(self):
+        sql = f"""
+        UPDATE {self.table_name}
+        SET {self.column} = {self.data}
+        WHERE {self.condition}
+        """
+        
         pass
     
     def insert(self):
+        sql = f"""
+        INSERT INTO {self.table_name}
+        ({self.columns})
+        VALUE
+        ({self.data})
+        """
+        agent.execute(sql)
+        database.commit()
         pass
     
     def columns_praser(self):
