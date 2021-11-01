@@ -27,11 +27,10 @@ class bus_database:
             table = sql_table(table_name)
             if table.exists: table.delete()
             table.create(parameters['column'])
-            web_spider(parameters['url'])
             """
             [1.] take the value from bus_dict
             [2.] create a table
-            [3.] scrap data
+            3. scrap data
             4. insert data
             """
         pass
@@ -147,8 +146,11 @@ class bus_database:
                 pass
         
             def _generator(self, url, parameters, table_name):
-                # query the parameters -> return data_array
-                return [url+'/'.join(data) for data in data_array]
+                return [url+'/'.join(data) 
+                        for data in table(
+                    table_name=table_name, 
+                    columns=parameter
+                ).query()]
             
         class eta:
             def table(self, selection: str):
@@ -167,7 +169,7 @@ class bus_database:
                 'nfb_route_stop': self.nfb.route_stop(selection),
                 'nfb_stop': self.nfb.stop(selection)
             } 
-            return indexes[table_name] if table_name else indexes 
+            return {talbe_name: indexes[table_name]} if table_name else indexes 
             pass
         
         
@@ -240,6 +242,8 @@ class sql_table:
         FROM {self.table_name}
         """
         if condition: sql+=f"WHERE {condition}"
+        agent.execute(sql)
+        return agent.fetchall()
         pass
     
     def update(self):
